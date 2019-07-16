@@ -5,23 +5,14 @@ import uuid from 'uuid';
 
 // REDUX
 import { connect } from 'react-redux';
-import { getCitas, addCitas, isError } from '../actions/citasActions';
-
-// const stateInicial = {
-//   cita: {
-//     mascota: '',
-//     propietario: '',
-//     fecha: '',
-//     hora: '',
-//     sintomas: ''
-//   },
-//   error: false
-// }
+import { getCitas, addCitas } from '../actions/citasActions';
+import { showError } from '../actions/errorActions';
 
 class NuevaCita extends Component {
 
-  // Si no utilizaramos Redux, con React haríamos lo siguiente:
-  // state = { ...stateInicial }
+  componentWillMount() {
+    this.props.showError(false);
+  }
 
   nombreMascotaRef = React.createRef();
   propietarioRef = React.createRef();
@@ -29,28 +20,14 @@ class NuevaCita extends Component {
   horaRef = React.createRef();
   sintomasRef = React.createRef();
 
-  componentDidMount() {
-    this.props.getCitas()
-    console.log(this.props)
-  }
-
-  // No nos hace falta ya que usamos referencias
-  // handleChange = e => {
-  //   this.setState({
-  //     cita: {
-  //       ...this.state.cita,
-  //       [e.target.name]: e.target.value
-  //     }
-  //   })
-  // }
 
   handleSubmit = e => {
     e.preventDefault();
 
-    // const { mascota, propietario, fecha, hora, sintomas } = this.state.cita;
     if (!this.nombreMascotaRef.current.value || !this.propietarioRef.current.value || !this.fechaRef.current.value || !this.horaRef.current.value || !this.sintomasRef.current.value) {
-      this.props.isError(true)
+      this.props.showError(true);
     } else {
+      // this.props.isError(false)
       const nuevaCita = {
         id: uuid(),
         mascota: this.nombreMascotaRef.current.value,
@@ -65,8 +42,10 @@ class NuevaCita extends Component {
 
       // reset al form (opcional)
       e.currentTarget.reset();
-    }
 
+      //eliminar el error
+      this.props.showError(false);
+    }
 
   }
 
@@ -145,12 +124,12 @@ class NuevaCita extends Component {
 }
 
 NuevaCita.propTypes = {
-  crearNuevaCita: PropTypes.func.isRequired
+  citas: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
   citas: state.citas.citas,
-  error: state.citas.error
+  error: state.error.error
 })
 
-export default connect(mapStateToProps, { getCitas, addCitas, isError })(NuevaCita);
+export default connect(mapStateToProps, { addCitas, showError })(NuevaCita);

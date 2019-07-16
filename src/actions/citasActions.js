@@ -1,4 +1,4 @@
-import { SHOW_CITAS, DELETE_CITAS, ADD_CITAS, IS_ERROR } from './types';
+import { SHOW_CITAS, DELETE_CITAS, ADD_CITAS } from './types';
 
 export const getCitas = () => {
   return {
@@ -17,12 +17,5 @@ export const deleteCitas = (id) => {
   return {
     type: DELETE_CITAS,
     payload: id
-  }
-}
-
-export const isError = (bool) => {
-  return {
-    type: IS_ERROR,
-    payload: bool
   }
 }

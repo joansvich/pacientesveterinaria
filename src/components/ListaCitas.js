@@ -6,9 +6,12 @@ import Cita from './Cita';
 import { connect } from 'react-redux';
 import { getCitas } from '../actions/citasActions';
 
+import store from '../store';
+store.subscribe(() => {
+  localStorage.setItem('citas', JSON.stringify(store.getState()))
+})
+
 class ListaCitas extends Component {
-
-
 
   componentDidMount() {
     this.props.getCitas();
